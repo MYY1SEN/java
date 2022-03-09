@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+       <!--【A】连接数据库获得数据源-->
+
+       <bean id="ds" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+
+           <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+
+           <property name="url" value="jdbc:mysql://localhost:3306/shiro"></property>
+
+           <property name="username" value="root"></property>
+
+           <property name="password" value="myq1314666"></property>
+
+       </bean>
+
+      <!--【B】获得session工厂-->
+
+       <bean id="factroy" class="org.mybatis.spring.SqlSessionFactoryBean">
+
+           <property name="dataSource" ref="ds"></property>
+
+           <property name="typeAliasesPackage" value="com.bjsxt.pojo"></property>
+       </bean>
+
+
+      <!--【C】扫描mapper文件-->
+
+       <bean id="mapper" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+
+           <property name="sqlSessionFactoryBeanName" value="factroy"></property>
+
+           <property name="basePackage" value="com.bjsxt.mapper"></property>
+       </bean>
+
+</beans>

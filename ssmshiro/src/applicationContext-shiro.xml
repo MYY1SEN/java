@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--[A]注册凭证匹配器-->
+
+    <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+
+          <property name="hashAlgorithmName" value="md5"></property>
+
+          <property name="hashIterations" value="2"></property>
+
+    </bean>
+
+    <!--[B]注册自定义Realm-->
+
+    <bean id="userRealm" class="com.bjsxt.realm.UserRealm">
+
+        <property name="credentialsMatcher"  ref="credentialsMatcher"></property>
+
+    </bean>
+
+    <!--[C]注册securityManager-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+
+        <property name="realms" ref="userRealm"></property>
+    </bean>
+
+    <!--[D]注册ShiroFilterFactoryBean对象-->
+
+    <!-- bean对象中的id名称必须和web.xml中targetBeanName保持一致-->
+
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+
+        <property name="securityManager"  ref="securityManager"></property>
+
+        <property name="loginUrl" value="/login"></property>
+
+        <property name="successUrl" value="/success.jsp"></property>
+
+        <property name="unauthorizedUrl" value="/error.jsp"></property>
+
+
+        <!--设置过滤器链的属性  authc拦截指定路径 anon放行资源  -->
+        <property name="filterChainDefinitions">
+
+            <value>
+                 /login=authc
+                  /**=anon
+            </value>
+
+        </property>
+
+    </bean>
+
+
+</beans>
