@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd">
+    <import resource="applicationContext.xml"/>
+    <!--    配置事务管理器切面对象-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!--        需要注入数据源-->
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!--    配置事务管理器属性-->
+    <tx:advice id="txAdvice">
+        <tx:attributes>
+            <!--            name:指定受事务管理的方法.配置方式1.给定完全方法名，2.给定*通配符-->
+            <!--            propagation配置事务的传播行为-->
+            <!--            isolation配置事务的隔离级别-->
+            <tx:method name="add*" propagation="REQUIRED" isolation="DEFAULT"/>
+        </tx:attributes>
+    </tx:advice>
+    <!--    配置切面-->
+    <aop:config>
+        <aop:pointcut id="txPointCut" expression="execution(* com.myq.service.*.*(..))"/>
+        <!--        配置切面-->
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointCut"/>
+    </aop:config>
+</beans>
