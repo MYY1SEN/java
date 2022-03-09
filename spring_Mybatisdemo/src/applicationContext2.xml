@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--    配置解析properties工具类-->
+    <context:property-placeholder location="db.properties"/>
+    <!--    配置数据源-->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="driverClassName" value="${jdbc.driver}"/>
+    </bean>
+    <!--    配置SqlSessionFactoryBean对象-->
+    <bean id="SqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="typeAliasesPackage" value="com.myq.pojo"/>
+        <!--        如果接口和映射文件在同一个包，mapperlocation不用配置-->
+        <!--        <property name="mapperLocations" value="com/myq/mapper/*.xml"/>-->
+    </bean>
+    <!--    配置MapperScannerConfigurer对象-->
+    <bean id="MapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.myq.mapper"/>
+    </bean>
+    <bean id="userService" class="com.myq.service.userServiceimpl2">
+        <property name="usersMapper" ref="usersMapper"/>
+    </bean>
+</beans>
