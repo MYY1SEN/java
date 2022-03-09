@@ -1,0 +1,12 @@
+{
+  "groups": [
+    {
+      "name": "jdbc",
+      "type": "javax.sql.DataSource",
+      "sourceType": "com.myq.springbootjdbc.Config.JdbcConfiguration",
+      "sourceMethod": "getDataSource()"
+    }
+  ],
+  "properties": [],
+  "hints": []
+}
